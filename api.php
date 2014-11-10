@@ -16,7 +16,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $pageSize = isset($_GET['pagesize']) ? $_GET['pagesize'] : 10;
-$sId = isset($_GET['sid']) ? $_GET['sid']:16;
+$sId = isset($_GET['sid']) ? $_GET['sid'] : 0;
 if (!is_numeric($page)||!is_numeric($pageSize)||!is_numeric($sId)) {
     Response::show(400, 'Bad Request：请求参数不合法！');
 }else{
@@ -25,29 +25,53 @@ if (!is_numeric($page)||!is_numeric($pageSize)||!is_numeric($sId)) {
 
 $offset = ($page-1)*$pageSize;
 
-$sqlsId = "select * from pubinfo where id = ".$sId." order by id desc limit 0,10";
+$tablePubinfo = "pubinfo";
+$tableId = "id";
+
+$sqlsId = "select * from ".$tablePubinfo." where ".$tableId." = ".$sId." order by ".$tableId." desc limit 0,10";
 $sqlsAll = "select * from pubinfo";
 
-$offset ."，".$pageSize;
+//$offset ."，".$pageSize;
 //echo $sqlsId;
 
 
 switch ($sId) {
     case '0':
-        con_mysql_get($sqlsAll);
+        con_mysql_get($sqlsAll, $tablePubinfo, $tableId, "all");
         break;
     
     default:
-        con_mysql_get($sqlsId);
+        con_mysql_get($sqlsId, $tablePubinfo, $tableId, $sId);
         break;
 }
 
 
+//定时缓存
+function apiCache($tablePubinfo, $tableId, $urlGet, $names){
 
+    $file = new File();
+
+    //$sId = isset($_GET['sid']) ? $_GET['sid'] : 0;
+    $n = "wx_".$tablePubinfo."_".$tableId."_".$urlGet;
+    //echo $n;
+
+    if($file->cacheData($n, $names)){//生成缓存
+    //if($file->cacheData('index_mk_cache')){//获取缓存
+    //if($file->cacheData('index_mk_cache', null)){//删除缓存
+    /*    echo "<pre>";
+        var_dump($file->cacheData('shujuke_cache'));exit;
+        echo "success";*/
+    } else{
+        return FALSE;
+        echo "files error !";
+    }
+
+}
 
 //自定义的数据库连接类
-function con_mysql_get ($sqlSome){
-    //echo $sqlSome;
+function con_mysql_get ($sqlSome, $tablePubinfo, $tableId, $urlGet){
+    echo $sqlsId;
+    //echo $urlGet;
     try{
         $connect = Db::getInstance()->connect();
     } catch(Exception $e){
@@ -55,10 +79,21 @@ function con_mysql_get ($sqlSome){
     }
     $result = mysql_query($sqlSome, $connect);
 
+
     while ($name = mysql_fetch_assoc($result)) {
         $names[] = $name;
     }
-    //生成接口数据
+
+
+    apiCache($tablePubinfo, $tableId, $urlGet, $names);
+
+    cResponse($names);
+    
+}
+
+//生成接口数据
+function cResponse($names){
+
     if ($names) {
         return Response::show(200, 'success', $names);
     }else{
@@ -75,9 +110,6 @@ function con_mysql_get ($sqlSome){
         exit;
     }
 }
-
-
-
 
 
 
