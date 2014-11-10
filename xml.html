@@ -13,7 +13,7 @@
     <ul>
         <li>请选择公众号：
             <select class="openid">
-                <option value ="oIWsFt7iH4VfITufiVW8QI_7FY04">大数据</option>
+                <option value="oIWsFt7iH4VfITufiVW8QI_7FY04">大数据</option>
                 <option value="oIWsFt4tMtQuLTETtblTNfj18J-s">大数据邦</option>
                 <option value="oIWsFt-NQJJTI1l_HJBI-iEy3qbg">36氪</option>
                 <option value="oIWsFt58NVJTkYWvPtICKgg8ka60">大数据文摘</option>
@@ -33,7 +33,49 @@
 <ul class="list"></ul>
 <script type="text/javascript">
 
+var allId = {
+    "大数据":"oIWsFt7iH4VfITufiVW8QI_7FY04",
+    "大数据邦":"oIWsFt4tMtQuLTETtblTNfj18J-s",
+    "36氪":"oIWsFt-NQJJTI1l_HJBI-iEy3qbg",
+    "大数据文摘":"oIWsFt58NVJTkYWvPtICKgg8ka60",
+    "腾讯大数据":"oIWsFt8IGU5AmaISz9iiB4Vh1kYE",
+    "宽客大数据实验室":"oIWsFt6hHZiswmg4LZ-1LitZX8E8"
+}
 
+var allId = {"pubinfo":[
+    {"name":""}
+]}
+
+var $openid = $('.openid');
+
+
+function addOpenid (object){
+
+/*    console.log(getObjectKeys(object));
+    console.log(getObjectValues(object));*/
+
+    //$openid.append('<option value="'+getObjectValues(object)+'">'+getObjectKeys(object)+'</option>');
+
+
+        var keys = [];
+        for (var property in object)
+          keys.push(property);
+        return keys;
+        console.log(keys.length);
+
+
+
+        var values = [];
+        for (var property in object)
+          values.push(object[property]);
+        return values;
+
+    console.log(allId.length);
+
+    
+}
+
+addOpenid(allId);
 
 function sogou(str){
     alert(str);
@@ -53,13 +95,13 @@ sogou.weixin.gzhcb = function(str){
         var textXml = $("."+i).find('textarea').text();
         var xmlToDoc = $("."+i).children('div');
         var arrayAll = textXml.split('title');
-        console.log(xmlToDoc.text());
-        console.log(arrayAll);
+        //console.log(xmlToDoc.text());
+        //console.log(arrayAll);
 
         var newTitle = arrayAll[1].split(']]></')[0].split('><![CDATA[')[1],
             newUrl = arrayAll[2].split(']]></url><')[0].split('><url><![CDATA[')[1],
             newdate = arrayAll[4].split('<date><![CDATA[')[1].split(']]></date>')[0];
-            console.log(newdate);
+            //console.log(newdate);
         xmlToDoc.append("<h3><a href='"+newUrl+"' target='_blank'> " + newTitle +" </a> <i> " + newdate+"</i></h3>");
 
         
@@ -79,7 +121,7 @@ sogou.weixin.gzhcb = function(str){
     var xmlDoc = (str.items),
         wenzhangAll = str.totalItems,
         pageAll = str.totalPages;
-    console.log(xmlDoc.length);
+    //console.log(xmlDoc.length);
     $('.ye').html(pageAll);
     $('.wz').html(wenzhangAll);
     $('.gzh').html();
@@ -107,11 +149,10 @@ var otext = $("#submit");
 
 otext.on('click',function(){
 
-var openid = $('.openid').val(),
-    page = $('.page').val(),
+var page = $('.page').val(),
     t = '1415260390998',
     script,
-    url='http://weixin.sogou.com/gzhjs?cb=sogou.weixin.gzhcb&openid='+openid+'&page='+page+'&t='+t;
+    url='http://weixin.sogou.com/gzhjs?cb=sogou.weixin.gzhcb&openid='+$openid.val()+'&page='+page+'&t='+t;
     //url='http://w.sugg.sogou.com/sugg/ajaj_json.jsp?key='+ inputKey +'&type=wxpub&ori=yes&pr=web&abtestid=&ipn=';
 
 

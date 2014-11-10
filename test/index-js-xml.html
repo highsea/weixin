@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>xml</title>
+
+<script type="text/javascript">
+    //兼容性创建xmlHttp对象  
+    if (window.ActiveXObject && !window.XMLHttpRequest) {  
+        window.XMLHttpRequest = function() {  
+            var msxmls = ["MSXML2.XMLHttp.5.0", "MSXML2.XMLHttp.4.0", "MSXML2.XMLHttp.3.0",  
+                          "MSXML2.XMLHttp", "Microsoft.XMLHttp"],ex;  
+            for (var i = 0; i < msxmls.length; i++)  
+            try {  
+                return new ActiveXObject(msxmls[i])  
+            } catch(ex) {}  
+            throw new Error("No   XML   component   installed! ");  
+        }  
+    }  
+    //实例化一个xmlhttp对象  
+    var xmlHttp = new XMLHttpRequest();  
+    //XMLHttp的readyState状态改变时处理函数绑定  
+    xmlHttp.onreadystatechange = HandlerStateChange;  
+      
+    //创建一个新的http请求，并指定此请求的方法、URL以及验证信息  
+    xmlHttp.open("GET", "test.xml", false);  
+      
+    //发送请求到http服务器并接收回应  
+    xmlHttp.send();  
+      
+    function HandlerStateChange() {  
+      statusNum = {
+        "0":'对象已建立，但是尚未初始化（尚未调用open方法）',
+        '2':'send方法已调用，但是当前的状态及http头未知',
+        '1':'对象已建立，尚未调用send方法',
+        '3':'已接收部分数据，因为响应及http头不全，这时通过responseBody和responseText获取部分数据会出现错误',
+        '4':'数据接收完毕,此时可以通过通过responseBody和responseText获取完整的回应数据'
+      } 
+      console.log(xmlHttp.readyState+':'+statusNum[xmlHttp.readyState]);  
+      
+        //返回当前请求的http状态码[200--成功  
+        console.log('返回当前请求的http状态码：'+xmlHttp.status);  
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {  
+            //responseText 将响应信息作为字符串返回  
+            //responseXML  xml的文档节点  
+            
+            var xmlData = xmlHttp.responseXML;  
+            //documentElement 返回跟节点  
+            var root = xmlData.documentElement;  
+            console.log(root);
+            //attributes 获取属性集合  
+            var attr = root.attributes;  
+            console.log('获取属性集合，长度：'+attr.length+'；获取属性n的值：'+attr.getNamedItem('n').value); 
+            //ie下获取节点值 text  
+            //FF下获取节点值 textContent  
+            //兼容性获取  
+            var oFind = root.getElementsByTagName("city");  
+            console.log(oFind[0].getElementsByTagName("name"));
+            //console.log(oFind.childNodes(0).nodeName);
+            //console.log(oFind.SelectSingleNode('name'));
+
+/*            function getAttributeValue (xmlNode,attrName){
+              if(!xmlNode)return "" ;
+              if(!xmlNode.attributes) return "" ;   
+              if(xmlNode.attributes[attrName]!=null) return xmlNode.attributes[attrName].value ;
+              if(xmlNode.attributes.getNamedItem(attrName)!=null)  return xmlNode.attributes.getNamedItem(attrName).value ;
+              return "" ;
+            }
+            console.log(getAttributeValue('cityname','x'));*/
+
+            for (var i = 0; i < oFind.length; i++) {
+              var cityname = oFind[i].cityname,
+                  gangwei = oFind[i].gangwei,
+                  name = oFind[i].name,
+                  age = oFind[i].age,
+                  htmlStr = '<li><b>'+cityname+'</b>0<i>'+gangwei+'</i>-<a>'+name+'</a>-<em>'+age+'</em></li>';
+                  document.write(htmlStr);
+
+            };
+            //var isFindTXT = root.text ? oFind.text: oFind.textContent;  
+            //document.write(isFindTXT);  
+        }  
+
+
+    }  
+</script>
+</head>
+<body>
+<ul id="list"></ul>
+
+</body>
+</html>

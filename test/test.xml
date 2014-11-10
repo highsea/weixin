@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="xmlcss.css" ?>
+<root z="high" n="sea">
+    <city>
+        <cityname x="a1">河北</cityname>
+        <gangwei>省委书记</gangwei>    
+        <name>张三</name>
+        <age>50</age>
+    </city>
+    <city>
+        <cityname>河南</cityname>
+        <gangwei>教育厅</gangwei>    
+        <name>李四</name>
+        <age>40</age>
+    </city>
+    <city>
+        <cityname>湖北</cityname>
+        <gangwei y="b">公安厅</gangwei>    
+        <name>王五</name>
+        <age>45</age>
+    </city>
+    <city>
+        <cityname>湖南</cityname>
+        <gangwei>省长</gangwei>    
+        <name>赵六</name>
+        <age>38</age>
+    </city>
+</root>

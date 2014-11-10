@@ -1,0 +1,36 @@
+<html>
+<head>
+	<title></title>
+</head>
+
+<body> 
+
+	
+<xmp id="x1"> 
+    <root> 
+        <node>test</node> 
+    </root> 
+</xmp> 
+</body> 
+<script> 
+if(!document.all) 
+    XMLDocument.prototype.__defineGetter__("xml",function(){
+    	return new XMLSerializer().serializeToString(this)
+    });
+
+function createXml(str){ 
+    if(document.all){ 
+        var xmlDom=new ActiveXObject("Microsoft.XMLDOM");
+        xmlDom.loadXML(str);
+        return xmlDom;
+    } 
+    else 
+        return new DOMParser().parseFromString(str, "text/xml"); 
+} 
+xml=createXml(document.getElementById("x1").innerHTML) 
+alert(xml.xml) 
+</script>
+
+
+</body>
+</html>

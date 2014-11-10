@@ -1,0 +1,58 @@
+<html>
+<head>
+    <title>jquery 读取xml</title>
+    <meta chaset="utf-8">
+    <script src="https://a.alipayobjects.com/u/js/201204/2S07Fhc1TN.js"></script> 
+
+</head>
+<body>
+
+<ul class="list"></ul>
+
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+
+    $.ajax({ 
+        url:'test.xml', 
+        type: 'GET', 
+        dataType: 'xml', 
+        timeout: 1000, 
+        error: function(xml){ 
+            alert('Error loading XML document'+xml); 
+        }, 
+        success: function(xml){ 
+
+            var root = $(xml).children('root');
+            var city = root.children('city');
+           
+            root.find('city').each(function(i){
+                var cityname = $(this).children('cityname'),
+                    citynameValue = cityname.text(),
+                    gangwei = $(this).children('gangwei'),
+                    gangweiValue = gangwei.text(),
+                    name = $(this).children('name'),
+                    nameValue = name.text(),
+                    age = $(this).children('age'),
+                    ageValue = age.text(),
+                    htmlStr = '<li><b>'+citynameValue+'</b><i>'+gangweiValue+'</i>-<a>'+nameValue+'</a>-<em>'+ageValue+'</em></li>';
+                    
+                    $('.list').append(htmlStr);
+
+                    function someValue(some){
+                        return root.find('city').children(some).text();
+                    }
+                    //console.log(someValue('cityname'));
+            });
+
+
+        } 
+    });
+
+})
+</script>
+
+</body>
+</html>
