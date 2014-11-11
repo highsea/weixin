@@ -34,17 +34,17 @@
 <script type="text/javascript">
 
 var allId = {
-    "大数据":"oIWsFt7iH4VfITufiVW8QI_7FY04",
-    "大数据邦":"oIWsFt4tMtQuLTETtblTNfj18J-s",
-    "36氪":"oIWsFt-NQJJTI1l_HJBI-iEy3qbg",
-    "大数据文摘":"oIWsFt58NVJTkYWvPtICKgg8ka60",
-    "腾讯大数据":"oIWsFt8IGU5AmaISz9iiB4Vh1kYE",
-    "宽客大数据实验室":"oIWsFt6hHZiswmg4LZ-1LitZX8E8"
+    "oIWsFt7iH4VfITufiVW8QI_7FY04":"nHVbVEnEDndxh1g3nyC4",
+    "oIWsFt4tMtQuLTETtblTNfj18J-s":"3HWBjjLETgwxhyPtnyD4",
+    "oIWsFt-NQJJTI1l_HJBI-iEy3qbg":"kYLz-NbE9OiLh8efn9e1",
+    "oIWsFt58NVJTkYWvPtICKgg8ka60":"HHXEyzPEjg3xhyKonyA4",
+    "oIWsFt8IGU5AmaISz9iiB4Vh1kYE":"CExvYLrEo4Tch6sDnxks",
+    "oIWsFt6hHZiswmg4LZ-1LitZX8E8":"8kwPALnEWYcmh6hjnxnW"
 }
 
-var allId = {"pubinfo":[
+/*var allId = {"pubinfo":[
     {"name":""}
-]}
+]}*/
 
 var $openid = $('.openid');
 
@@ -75,7 +75,7 @@ function addOpenid (object){
     
 }
 
-addOpenid(allId);
+/*addOpenid(allId);*/
 
 function sogou(str){
     alert(str);
@@ -120,11 +120,12 @@ sogou.weixin.gzhcb = function(str){
 
     var xmlDoc = (str.items),
         wenzhangAll = str.totalItems,
-        pageAll = str.totalPages;
+        pageAll = str.totalPages,
+        gzhImgUrl = 'http://img03.sogoucdn.com/app/a/100520105/'; 
     //console.log(xmlDoc.length);
     $('.ye').html(pageAll);
     $('.wz').html(wenzhangAll);
-    $('.gzh').html();
+    $('.gzh').html('<img src="'+gzhImgUrl+allId[$openid.val()]+'" >');
 
     //$(domList).append(encodeURI(xmlDoc));
     //console.log(xmlDoc);
