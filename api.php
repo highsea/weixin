@@ -2,6 +2,7 @@
 require_once('./file/file.php');//文件夹操作
 require_once('./db/db.my.php');//自定义的 数据库连接类
 require_once('./res/response.php');//综合接口封装
+header("Content-type: text/html; charset=utf-8"); 
 header('Access-Control-Allow-Origin:.a.com');
 header('Content-Type: application/x-javascript');  
 /*****
@@ -13,13 +14,12 @@ header('Content-Type: application/x-javascript');
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 
 //定义接口参数
+$sId = isset($_GET['sid']) ? $_GET['sid'] : 0;
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $pageSize = isset($_GET['pagesize']) ? $_GET['pagesize'] : 10;
-$sId = isset($_GET['sid']) ? $_GET['sid'] : 0;
+
 if (!is_numeric($page)||!is_numeric($pageSize)||!is_numeric($sId)) {
     Response::show(400, 'Bad Request：请求参数不合法！');
-}else{
-    //Response::show(200, 'success', $data, '');//format模式
 }
 
 $offset = ($page-1)*$pageSize;
@@ -31,37 +31,55 @@ $sqlsId = "select * from ".$tablePubinfo." where ".$tableId." = ".$sId." order b
 $sqlsAll = "select * from pubinfo";
 
 //$offset ."，".$pageSize;
-//echo $sqlsId;
+
 $cacheFile = "wx_".$tablePubinfo."_".$tableId."_".$sId;
 $cacheDir = "./cache/";
+$nowCacheJsonFile = $cacheDir.$cacheFile.".json";
 
 //使用 file_get_contents 方法
-/*if (is_file($cacheDir.$cacheFile.".json")) {
+if (is_file($nowCacheJsonFile)) {
     //echo "当前目录中，文件".$cacheFile.".json存在";
-    $cacheDataJson = json_decode(file_get_contents($cacheDir.$cacheFile.".json"));
-    customJsonRes('304', 'cache', $cacheDataJson);
-}*/
+    $changeFile = filemtime ($nowCacheJsonFile);
+    $createFile = filectime ($nowCacheJsonFile);
+    //echo (date("Y-m-d H:i:s",$changFile));
+    //echo $changeFile-$createFile;
+    if ($changeFile-$createFile > 0) {//缓存时间为1天
 
+        $cacheDataJson = json_decode(file_get_contents($cacheDir.$cacheFile.".json"));
+        customJsonRes('304', 'cache', $cacheDataJson);
+
+    }else{
+
+        searchOrder($sId, $sqlsAll, $sqlsId, $tablePubinfo, $tableId);
+    }
+}
 //使用已经封装的 File()方法
-$jsonFile = new File();
+/*$jsonFile = new File();
 if($jsonFile->cacheData($cacheFile)){//获取缓存
 customJsonRes('304', 'cache', $jsonFile->cacheData($cacheFile));
 exit;
+}*/
+else{
+    searchOrder($sId, $sqlsAll, $sqlsId, $tablePubinfo, $tableId);
 }
 
-else{
+
+//执行查询操作
+function searchOrder($sId, $sqlsAll, $sqlsId, $tablePubinfo, $tableId){
 
     switch ($sId) {
-        case '0':
-            con_mysql_get($sqlsAll, $tablePubinfo, $tableId, "all");
-            break;
-        
-        default:
-            con_mysql_get($sqlsId, $tablePubinfo, $tableId, $sId);
-            break;
-    }
+    case '0':
 
+        con_mysql_get($sqlsAll, $tablePubinfo, $tableId, $sId);
+        break;
+
+    default:
+        con_mysql_get($sqlsId, $tablePubinfo, $tableId, $sId);
+
+        break;
+    }
 }
+
 
 //定时缓存
 function apiCache($tablePubinfo, $tableId, $urlGet, $names){
@@ -70,26 +88,21 @@ function apiCache($tablePubinfo, $tableId, $urlGet, $names){
 
     //$sId = isset($_GET['sid']) ? $_GET['sid'] : 0;
     $n = "wx_".$tablePubinfo."_".$tableId."_".$urlGet;
-    //echo $n;
 
-    if($file->cacheData($n, $names)){//生成缓存
+    $file->cacheData($n, $names);
+    //生成缓存
     //if($file->cacheData('index_mk_cache')){//获取缓存
     //if($file->cacheData('index_mk_cache', null)){//删除缓存
-    /*    echo "<pre>";
-        var_dump($file->cacheData('shujuke_cache'));exit;
-        echo "success";*/
-    } else{
-        return FALSE;
-        echo "files error !";
-    }
+
 
 }
 
 
 //自定义的数据库连接类
 function con_mysql_get ($sqlSome, $tablePubinfo, $tableId, $urlGet){
-    echo $sqlsId;
-    //echo $urlGet;
+
+    //echo $sqlSome.'哈哈'.$tablePubinfo.'啊啊'.$tableId.'哦哦'.$urlGet;
+
     try{
         $connect = Db::getInstance()->connect();
     } catch(Exception $e){
@@ -109,7 +122,7 @@ function con_mysql_get ($sqlSome, $tablePubinfo, $tableId, $urlGet){
     
 }
 
-//生成接口数据
+//综合封装模式 生成接口数据
 function cResponse($names){
 
 
@@ -124,7 +137,7 @@ function cResponse($names){
     }
 }
 
-
+//自定义生成json格式数据
 function customJsonRes($code, $message, $customJson){
 
     $callback = isset($_GET['callback']) ? $_GET['callback'] : 'callback'; 
