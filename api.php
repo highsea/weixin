@@ -32,27 +32,24 @@ $sqlsAll = "select * from pubinfo";
 
 //$offset ."，".$pageSize;
 //echo $sqlsId;
-$cacheFile = "wx_".$tablePubinfo."_".$tableId."_".$sId.".json";
+$cacheFile = "wx_".$tablePubinfo."_".$tableId."_".$sId;
 $cacheDir = "./cache/";
 
-if (is_file($cacheDir.$cacheFile)) {
-    //echo "当前目录中，文件".$cacheFile."存在";
+//使用 file_get_contents 方法
+/*if (is_file($cacheDir.$cacheFile.".json")) {
+    //echo "当前目录中，文件".$cacheFile.".json存在";
+    $cacheDataJson = json_decode(file_get_contents($cacheDir.$cacheFile.".json"));
+    customJsonRes('304', 'cache', $cacheDataJson);
+}*/
 
-    $cacheDataJson = json_decode(file_get_contents($cacheDir.$cacheFile));
-    
-    $callback = isset($_GET['callback']) ? $_GET['callback'] : 'callback'; 
+//使用已经封装的 File()方法
+$jsonFile = new File();
+if($jsonFile->cacheData($cacheFile)){//获取缓存
+customJsonRes('304', 'cache', $jsonFile->cacheData($cacheFile));
+exit;
+}
 
-    $resultCacheDataJson = array(
-        'code' => 304,
-        'message' => 'cache',
-        'data' => $cacheDataJson
-    );
-    //echo "<br>";
-    //var_dump($resultCacheDataJson);
-    echo $callback.'('.json_encode($resultCacheDataJson).')';
-    exit;
-
-}else{
+else{
 
     switch ($sId) {
         case '0':
@@ -123,19 +120,25 @@ function cResponse($names){
     }else{
 
         //return Response::show(404, 'not found：没找到数据！', $names);
-        //设置callback
-        $callback = isset($_GET['callback']) ? $_GET['callback'] : 'callback'; 
-
-        $result = array(
-            'code' => '404',
-            'message' => 'not found：没找到数据！',
-            'data' => 'null'
-        );
-        echo $callback.'('.json_encode($result).')';
-        exit;
+        customJsonRes('404', 'not found：没找到数据！', 'null');
     }
 }
 
+
+function customJsonRes($code, $message, $customJson){
+
+    $callback = isset($_GET['callback']) ? $_GET['callback'] : 'callback'; 
+
+    $resultCacheDataJson = array(
+        'code' => $code,
+        'message' => $message,
+        'data' => $customJson
+    );
+
+    echo $callback.'('.json_encode($resultCacheDataJson).')';
+    exit;
+
+}
 
 /*$serverArry = {
     '100':'继续',
