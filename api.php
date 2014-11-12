@@ -13,7 +13,6 @@ header('Content-Type: application/x-javascript');
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 
 //定义接口参数
-
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $pageSize = isset($_GET['pagesize']) ? $_GET['pagesize'] : 10;
 $sId = isset($_GET['sid']) ? $_GET['sid'] : 0;
@@ -33,18 +32,39 @@ $sqlsAll = "select * from pubinfo";
 
 //$offset ."，".$pageSize;
 //echo $sqlsId;
+$cacheFile = "wx_".$tablePubinfo."_".$tableId."_".$sId.".json";
+$cacheDir = "./cache/";
 
+if (is_file($cacheDir.$cacheFile)) {
+    //echo "当前目录中，文件".$cacheFile."存在";
 
-switch ($sId) {
-    case '0':
-        con_mysql_get($sqlsAll, $tablePubinfo, $tableId, "all");
-        break;
+    $cacheDataJson = json_decode(file_get_contents($cacheDir.$cacheFile));
     
-    default:
-        con_mysql_get($sqlsId, $tablePubinfo, $tableId, $sId);
-        break;
-}
+    $callback = isset($_GET['callback']) ? $_GET['callback'] : 'callback'; 
 
+    $resultCacheDataJson = array(
+        'code' => 304,
+        'message' => 'cache',
+        'data' => $cacheDataJson
+    );
+    //echo "<br>";
+    //var_dump($resultCacheDataJson);
+    echo $callback.'('.json_encode($resultCacheDataJson).')';
+    exit;
+
+}else{
+
+    switch ($sId) {
+        case '0':
+            con_mysql_get($sqlsAll, $tablePubinfo, $tableId, "all");
+            break;
+        
+        default:
+            con_mysql_get($sqlsId, $tablePubinfo, $tableId, $sId);
+            break;
+    }
+
+}
 
 //定时缓存
 function apiCache($tablePubinfo, $tableId, $urlGet, $names){
@@ -67,6 +87,7 @@ function apiCache($tablePubinfo, $tableId, $urlGet, $names){
     }
 
 }
+
 
 //自定义的数据库连接类
 function con_mysql_get ($sqlSome, $tablePubinfo, $tableId, $urlGet){
@@ -94,9 +115,13 @@ function con_mysql_get ($sqlSome, $tablePubinfo, $tableId, $urlGet){
 //生成接口数据
 function cResponse($names){
 
+
+
     if ($names) {
         return Response::show(200, 'success', $names);
+
     }else{
+
         //return Response::show(404, 'not found：没找到数据！', $names);
         //设置callback
         $callback = isset($_GET['callback']) ? $_GET['callback'] : 'callback'; 
@@ -110,8 +135,6 @@ function cResponse($names){
         exit;
     }
 }
-
-
 
 
 /*$serverArry = {
