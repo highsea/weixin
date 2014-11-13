@@ -39,14 +39,16 @@ $nowCacheJsonFile = $cacheDir.$cacheFile.".json";
 //使用 file_get_contents 方法
 if (is_file($nowCacheJsonFile)) {
     //echo "当前目录中，文件".$cacheFile.".json存在";
-    $changeFile = filemtime ($nowCacheJsonFile);
+    $modifyFile = filemtime ($nowCacheJsonFile);
     $createFile = filectime ($nowCacheJsonFile);
+    $nowtime = time();
     //echo (date("Y-m-d H:i:s",$changFile));
-    //echo $changeFile-$createFile;
-    if ($changeFile-$createFile > 0) {//缓存时间为1天
+
+    //echo $nowtime-$modifyFile;
+    if (($nowtime-$modifyFile)/3600 < 1) {//缓存时间为1小时
 
         $cacheDataJson = json_decode(file_get_contents($cacheDir.$cacheFile.".json"));
-        customJsonRes('304', 'cache', $cacheDataJson);
+        customJsonRes('304', 'cache', $cacheDataJson, date("Y-m-d H:i:s",$modifyFile));
 
     }else{
 
@@ -133,19 +135,20 @@ function cResponse($names){
     }else{
 
         //return Response::show(404, 'not found：没找到数据！', $names);
-        customJsonRes('404', 'not found：没找到数据！', 'null');
+        customJsonRes('404', 'not found：没找到数据！', 'null', 'null');
     }
 }
 
 //自定义生成json格式数据
-function customJsonRes($code, $message, $customJson){
+function customJsonRes($code, $message, $customJson, $mtime){
 
     $callback = isset($_GET['callback']) ? $_GET['callback'] : 'callback'; 
 
     $resultCacheDataJson = array(
         'code' => $code,
         'message' => $message,
-        'data' => $customJson
+        'data' => $customJson,
+        'mtime' => $mtime
     );
 
     echo $callback.'('.json_encode($resultCacheDataJson).')';
