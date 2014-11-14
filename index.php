@@ -1,72 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>查找 微信公众号</title>
+<title>查找 微信号 该微信号的最近文章</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
-	<script src="https://a.alipayobjects.com/u/js/201204/2S07Fhc1TN.js"></script> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+
+<style type="text/css">
+body{font-family: 'Microsoft YaHei'}
+.bs-callout {
+padding: 20px;
+margin: 20px 0;
+border: 1px solid #eee;
+border-left-width: 5px;
+border-radius: 3px;}
+.bs-callout-danger{border-left-color: #d9534f;}
+
+</style>
 </head>
 <body>
+<div class="container">
 
-	<div>
-		请输入公众号：(中文，英文，拼音 都可以) <a href="xml.html" target="_blank"> 公众号文章查询</a> <br>
-		<input type="text" class="query" name="query" /><input type="button" value="提交" id="submit" /><br>
-		查询结果：
-		<div class="result">
-			<ul class="list"></ul>
-		</div>
-	</div>
-<script type="text/javascript">
+    <ul class="nav nav-pills" role="tablist">
+      <li role="presentation" class="active"><a href="#">Home</a></li>
+      <li role="presentation"><a href="test/pub.php">公众号查询</a></li>
+      <li role="presentation"><a href="test/xml.html">公众号最近文章</a></li>
+      <li role="presentation"><a href="test/key.php">关键词匹配文章</a></li>
 
+    </ul>
+</div>
+<div class="container">
+    <div class="bs-callout bs-callout-danger">
+        <h1 id="navbar-default">查询</h1>
+        <p>公众号、公众号最近文章、关键词匹配文章查询</p>
+        <strong class="text-danger">数据来自搜索引擎。</strong>
+    </div>
 
-window.sogou = function(str){
-    alert(str);
-}
-window.sogou.sug = function(str){
-
-	var domList = $('.list'),
-	    htmlStr;
-	function cHtml(){
-		domList.append("<li>"+htmlStr+"</li>");
-	}
-    domList.html('');
-
-	for (var i in str){
-			if (typeof(str[i])!='object'&&str[i]!=''&&str[i]!='0') {
-				var htmlStr= str[i];
-				cHtml();
-			}else{
-				for (var i = 0; i < str[1].length; i++) {
-					var htmlStr = str[1][i];
-				    cHtml();
-
-				};
-			}
-	    }
-	
-}
-
-var otext = $("#submit");
-otext.on('click',function(){
-
-    var inputKey = $('.query').val();
-    var script=null;
-    url='http://w.sugg.sogou.com/sugg/ajaj_json.jsp?key='+ inputKey +'&type=wxpub&ori=yes&pr=web&abtestid=&ipn=';
-        
-    if(script){
-        document.body.removeChild(script);
-    }else{
-        script=document.createElement('script');
-        script.src = url;
-        document.body.appendChild(script);
-    }
+</div>
 
 
-    
-});
+<!-- <script src="https://a.alipayobjects.com/u/js/201204/2S07Fhc1TN.js"></script>  -->
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 
-</script>
 </body>
 </html>

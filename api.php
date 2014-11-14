@@ -3,7 +3,7 @@ require_once('./file/file.php');//文件夹操作
 require_once('./db/db.my.php');//自定义的 数据库连接类
 require_once('./res/response.php');//综合接口封装
 header("Content-type: text/html; charset=utf-8"); 
-header('Access-Control-Allow-Origin:.a.com');
+//header('Access-Control-Allow-Origin:.a.com');
 header('Content-Type: application/x-javascript');  
 /*****
 *error_reporting http://www.w3school.com.cn/php/func_error_reporting.asp
@@ -45,7 +45,9 @@ if (is_file($nowCacheJsonFile)) {
     //echo (date("Y-m-d H:i:s",$changFile));
 
     //echo $nowtime-$modifyFile;
-    if (($nowtime-$modifyFile)/3600 < 1) {//缓存时间为1小时
+    //if (($nowtime-$modifyFile)/3600 < 1) {//缓存时间为1小时
+    if (($nowtime-$modifyFile)/86400 < 3) {//缓存时间为3天
+
 
         $cacheDataJson = json_decode(file_get_contents($cacheDir.$cacheFile.".json"));
         customJsonRes('304', 'cache', $cacheDataJson, date("Y-m-d H:i:s",$modifyFile));

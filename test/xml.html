@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>该微信号的最近文章</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.min.css">
+
+<style type="text/css">
+em{font-style: normal;font-size: 30%}
+body{font-family: 'Microsoft YaHei'}
+.bs-callout {
+padding: 20px;
+margin: 20px 0;
+border: 1px solid #eee;
+border-left-width: 5px;
+border-radius: 3px;}
+.bs-callout-danger{border-left-color: #d9534f;}
+.pad1em{padding: 1em}
+</style>
+</head>
+<body>
+<div class="container">
+    <ul class="nav nav-pills" role="tablist">
+        <li role="presentation"><a href="../">Home</a></li>
+        <li role="presentation"><a href="pub.php">公众号查询</a></li>
+        <li role="presentation" class="active"><a href="#">公众号最近文章</a></li>
+        <li role="presentation"><a href="key.php">关键词匹配文章</a></li>
+    </ul>
+</div>
+
+<div class="container">
+
+    <div class="bs-callout bs-callout-danger">
+        <h1>公众号最近文章查询</h1>
+        <p>当前仅支持以下公众号，请选择后使用；正在优化对搜索出的公众号进行匹配。</p>
+        <p>点击对应文章的首图可以展示原图，对应文章有来源时可以点击"去看看"查看原文。</p>
+        <strong class="text-danger">数据来自搜索引擎。故以浏览器爬虫机器人(遵守 Robot.txt 协议)的更新时间为准。最新更新的文章在第一页。</strong>
+
+    </div>
+
+
+<div class="selectAll">
+
+        <div class="row">
+            <label class="col-sm-2 control-label" ><h4>请选择公众号</h4></label>
+            <div class="col-sm-5">
+                <select class="openid form-control" ></select>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group ">
+                    <div class="input-group-addon">查看第：</div>
+                    <input type="text" class="query form-control page" name="query" placeholder="1" value="1" >
+                    <div class="input-group-addon" for="">页</div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button id="submit" type="button" class="btn btn-primary">提 交</button>
+            </div>
+        </div>
+
+
+    <h4 class="resultHead">您查询的公众号 <span class="gzh"></span>，其共有文章 <b class="wz"></b> 篇，分为 <b class="ye"></b> 页。</h4>
+</div>
+<hr>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered">
+        <tr> 
+            <td>首图</td>      
+            <td>标题</td>
+            <td>摘要</td>
+            <td>来源</td>
+            <td>日期</td>
+        </tr>
+    </table>
+    <table class="table table-hover list"></table>
+</div>
+
+
+
+</div>
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+var $openid = $('.openid');
+
+    jQuery.ajax({
+            type  : "get",
+            async : true,
+            url : 'http://api.miningdata.com.cn/api/wxpub/api.php',
+            dataType : "jsonp",
+            jsonp : "callback",
+            data : {
+                sid:"0"
+            },
+            jsonpCallback : "dataList",
+            success : function(dataList){
+                var code = dataList.code,
+                    mtime = dataList.mtime;
+
+                if (code==200||code==304) {
+                    //写入 select option 数据
+                    var d = dataList.data;
+                    for (var i = 0; i < d.length; i++) {
+                        var id = d[i].id,
+                            cname = d[i].cname,
+                            wname = d[i].wname,
+                            //originid = d[i].originid,
+                            imgid = d[i].imgid,
+                            openid = d[i].openid,
+                            //type = d[i].type,
+                            introduction = d[i].introduction,
+
+                            str = '<option data-wname="'+wname+'" data-intro="'+introduction+'" value="'+openid+'" name="'+openid+'" data-pubimg="'+imgid+'">'+cname+'</option>';
+                            $openid.append(str);
+                      };  
+                      
+                };
+                
+
+            },
+            error : function(){
+
+            }
+        });
+
+
+
+function addOpenid (object){
+
+/*    console.log(getObjectKeys(object));
+    console.log(getObjectValues(object));*/
+
+    //$openid.append('<option value="'+getObjectValues(object)+'">'+getObjectKeys(object)+'</option>');
+
+
+        var keys = [];
+        for (var property in object)
+          keys.push(property);
+        return keys;
+        console.log(keys.length);
+
+
+
+        var values = [];
+        for (var property in object)
+          values.push(object[property]);
+        return values;
+
+    console.log(allId.length);
+
+    
+}
+
+/*addOpenid(allId);*/
+
+function sogou(str){
+    alert(str);
+}
+sogou.weixin =function(str){
+    alert(str);
+}
+sogou.weixin.gzhcb = function(str){
+
+    var domList = $('.list'),
+        result = $('.resultHead'),
+        htmlStr;
+
+    function cHtml(i){
+        domList.append("<tr class='"+i+"'><td style='display:none'>xml源码：<textarea>"+decodeURI(htmlStr)+"</textarea></td></tr>");
+        //console.log(a.data('xml'));
+        var textXml = $("."+i).find('textarea').text();
+        var xmlToDoc = $("."+i);
+        var arrayAll = textXml.split('title');
+        //console.log(xmlToDoc.text());
+        //-----------------console.log(arrayAll);
+        //console.log(arrayAll[4].split('<site><![CDATA[')[1].split(']]></site>')[0]);
+        var newTitle = arrayAll[1].split(']]></')[0].split('><![CDATA[')[1],
+            newUrl = arrayAll[2].split(']]></url><')[0].split('><url><![CDATA[')[1],
+            newdate = arrayAll[4].split('<date><![CDATA[')[1].split(']]></date>')[0],
+            content = arrayAll[4].split('<content168><![CDATA[')[1].split(']]></content168>')[0],
+            imglink = arrayAll[4].split('<imglink><![CDATA[')[1].split(']]></imglink>')[0],
+            //
+            site_isV = arrayAll[4].split('</content168>')[1].split('<openid><![CDATA[')[0],
+            site_regexp = new RegExp('site'),
+            judge_result = site_regexp.test(site_isV),
+            //
+            originUrl = judge_result ? arrayAll[4].split('<site><![CDATA[')[1].split(']]></site>')[0] : '无',
+            goOriginUrl = originUrl==='无' ? '无' : '<a href="'+originUrl+'" target="_blank">去看看</a>',
+            tableStr = "<td class='col-sm-2 xuhao_"+i+"'><a href='"+imglink+"' target='_blank'><img src="+imglink+" class='img-thumbnail img-responsive'></a></td>"
+                     + "<td class='col-sm-2'><a href='"+newUrl+"' target='_blank'>" + newTitle +"</a></td>"
+                     + "<td class='col-sm-4'><em>"+content+"</em></td>"
+                     + "<td class='col-sm-2'>"+goOriginUrl+"</td>"
+                     + "<td class='col-sm-2'> " + newdate+"</td>";
+                     //console.log(judge_result);
+            //console.log(newdate);
+        xmlToDoc.append(tableStr);
+
+    }
+
+/*function decodeXml(i){
+    var b = $("."+i);
+    var arrayAll = decodeURI(b.data('xml')).split('title');
+    b.html('<textarea>'+decodeURI(b.data('xml'))+'</textarea>');
+    console.log(arrayAll[2]);
+
+}*/
+
+    domList.html('');
+    //result.find('b').html('');
+
+    var xmlDoc = (str.items),
+        wenzhangAll = str.totalItems,
+        pageAll = str.totalPages,
+        gzhImgUrl = 'http://img03.sogoucdn.com/app/a/100520105/'; 
+    //console.log(xmlDoc.length);
+    $('.ye').html(pageAll);
+    $('.wz').html(wenzhangAll);
+    var thisPub = $("[name="+$('.openid').val()+"]");
+
+    $('.gzh').html('<b>'+thisPub.text()+'</b>（微信id是：'+thisPub.data("wname")+'）：'+thisPub.data("intro")+' <img src="'+gzhImgUrl+thisPub.data("pubimg")+'" >');
+
+    //$(domList).append(encodeURI(xmlDoc));
+    //console.log(xmlDoc);
+    //console.log(typeof(xmlDoc));
+    //alert(str.items);
+
+    for (var i = 0; i < xmlDoc.length; i++) {
+        var htmlStr = encodeURI(xmlDoc[i]);//encodeURI
+        cHtml("xml_"+i);
+        //decodeXml("xml_"+i);
+        //setTimeout(cDocument("doc_"+i), 500);
+
+    };
+    
+}
+
+var otext = $("#submit");
+
+otext.on('click',function(){
+
+var page = $('.page').val(),
+    t = '1415260390998',
+    script,
+    url='http://weixin.sogou.com/gzhjs?cb=sogou.weixin.gzhcb&openid='+$openid.val()+'&page='+page+'&t='+t;
+    //url='http://w.sugg.sogou.com/sugg/ajaj_json.jsp?key='+ inputKey +'&type=wxpub&ori=yes&pr=web&abtestid=&ipn=';
+
+    //if ($('.list').html()==''||$('.openid').val()!='oIWsFt5LBqZonLTOrdE6oMbmvzRU') {
+
+        $('.resultHead').find('b').html('');
+        
+        if(script){
+            document.body.removeChild(script);
+        }else{
+            script=document.createElement('script');
+            script.src = url;
+            document.body.appendChild(script);
+        }
+
+    //};
+
+
+});
+
+
+
+
+
+</script>
+</body>
+</html>
