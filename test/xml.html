@@ -61,8 +61,9 @@ border-radius: 3px;}
             </div>
         </div>
 
-
-    <h4 class="resultHead">您查询的公众号 <span class="gzh"></span>，其共有文章 <b class="wz"></b> 篇，分为 <b class="ye"></b> 页。</h4>
+    <!-- 公众号详细信息 -->
+    <div class="resultHead row"></div>
+    <!-- 您查询的公众号 <span class="gzh"></span>，其共有文章 <b class="wz"></b> 篇，分为 <b class="ye"></b> 页。 -->
 </div>
 <hr>
 <div class="table-responsive">
@@ -212,16 +213,18 @@ sogou.weixin.gzhcb = function(str){
     domList.html('');
     //result.find('b').html('');
 
+    //公众号详细信息 
     var xmlDoc = (str.items),
         wenzhangAll = str.totalItems,
         pageAll = str.totalPages,
         gzhImgUrl = 'http://img03.sogoucdn.com/app/a/100520105/'; 
     //console.log(xmlDoc.length);
-    $('.ye').html(pageAll);
-    $('.wz').html(wenzhangAll);
+    //$('.ye').html(pageAll);
+    //$('.wz').html(wenzhangAll);
     var thisPub = $("[name="+$('.openid').val()+"]");
 
-    $('.gzh').html('<b>'+thisPub.text()+'</b>（微信id是：'+thisPub.data("wname")+'）：'+thisPub.data("intro")+' <img src="'+gzhImgUrl+thisPub.data("pubimg")+'" >');
+    result.html('<div class="col-sm-6 bs-callout bs-callout-info"><h4>'+thisPub.text()+'</h4><p>其微信ID是：<b>'+thisPub.data("wname")+'</b> —— <i>'+thisPub.data("intro")+'</i> <br>其共有文章<b>'+wenzhangAll+'</b>篇，分为<b>'+pageAll+'</b>页。</p></div><div class="col-sm-4"><img src="'+gzhImgUrl+thisPub.data("pubimg")+'"</div>');
+
 
     //$(domList).append(encodeURI(xmlDoc));
     //console.log(xmlDoc);
@@ -250,7 +253,7 @@ var page = $('.page').val(),
 
     //if ($('.list').html()==''||$('.openid').val()!='oIWsFt5LBqZonLTOrdE6oMbmvzRU') {
 
-        $('.resultHead').find('b').html('');
+        //$('.resultHead').find('b').html('');
         
         if(script){
             document.body.removeChild(script);
