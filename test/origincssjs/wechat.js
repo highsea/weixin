@@ -1,5 +1,7 @@
 var $openid = $('.openid');
 
+if ($openid.val()=='loading') {
+
     jQuery.ajax({
             type  : "get",
             async : true,
@@ -40,7 +42,10 @@ var $openid = $('.openid');
 
             }
         });
-
+}else{
+    searchNow();
+    //console.log('执行搜索');
+};
 
 
 function addOpenid (object){
@@ -134,9 +139,12 @@ sogou.weixin.gzhcb = function(str){
     //console.log(xmlDoc.length);
     //$('.ye').html(pageAll);
     //$('.wz').html(wenzhangAll);
-    var thisPub = $("[name="+$('.openid').val()+"]");
+    var thisPub = $("[name="+$('.openid').val()+"]")==undefined ? "未知" : $("[name="+$('.openid').val()+"]");
+    var thisPubImg = thisPub.data("pubimg")==undefined ? "../images/undefined.jpg" :gzhImgUrl+thisPub.data("pubimg");
+    var thisPunWname = thisPub.data("wname")==undefined ? "未知" : thisPub.data("wname");
+    var thisPubIntro = thisPub.data("intro")==undefined ? '未知' : thisPub.data("intro");
 
-    result.html('<div class="col-sm-6 bs-callout bs-callout-info"><h4>'+thisPub.text()+'</h4><p>其微信ID是：<b>'+thisPub.data("wname")+'</b> —— <i>'+thisPub.data("intro")+'</i> <br>其共有文章<b>'+wenzhangAll+'</b>篇，分为<b>'+pageAll+'</b>页。</p></div><div class="col-sm-4"><img src="'+gzhImgUrl+thisPub.data("pubimg")+'"</div>');
+    result.html('<div class="col-sm-6 bs-callout bs-callout-info"><h4>'+thisPub.text()+'</h4><p>其微信ID是：<b>'+thisPunWname+'</b> —— <i>'+thisPubIntro+'</i> <br>其共有文章<b>'+wenzhangAll+'</b>篇，分为<b>'+pageAll+'</b>页。</p></div><div class="col-sm-4"><img src="'+thisPubImg+'"</div>');
 
 
     //$(domList).append(encodeURI(xmlDoc));
@@ -157,30 +165,29 @@ sogou.weixin.gzhcb = function(str){
 var otext = $("#submit");
 
 otext.on('click',function(){
-
-var page = $('.page').val(),
-    t = '1415260390998',
-    script,
-    url='http://weixin.sogou.com/gzhjs?cb=sogou.weixin.gzhcb&openid='+$openid.val()+'&page='+page+'&t='+t;
-    //url='http://w.sugg.sogou.com/sugg/ajaj_json.jsp?key='+ inputKey +'&type=wxpub&ori=yes&pr=web&abtestid=&ipn=';
-
-    //if ($('.list').html()==''||$('.openid').val()!='oIWsFt5LBqZonLTOrdE6oMbmvzRU') {
-
-        //$('.resultHead').find('b').html('');
-        
-        if(script){
-            document.body.removeChild(script);
-        }else{
-            script=document.createElement('script');
-            script.src = url;
-            document.body.appendChild(script);
-        }
-
-    //};
-
-
+    searchNow();
 });
 
+function searchNow (){
+    var page = $('.page').val(),
+        t = '1415260390998',
+        script,
+        url='http://weixin.sogou.com/gzhjs?cb=sogou.weixin.gzhcb&openid='+$openid.val()+'&page='+page+'&t='+t;
+        //url='http://w.sugg.sogou.com/sugg/ajaj_json.jsp?key='+ inputKey +'&type=wxpub&ori=yes&pr=web&abtestid=&ipn=';
 
+        //if ($('.list').html()==''||$('.openid').val()!='oIWsFt5LBqZonLTOrdE6oMbmvzRU') {
+
+            //$('.resultHead').find('b').html('');
+            
+            if(script){
+                document.body.removeChild(script);
+            }else{
+                script=document.createElement('script');
+                script.src = url;
+                document.body.appendChild(script);
+            }
+
+        //};
+}
 
 

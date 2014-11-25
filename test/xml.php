@@ -18,7 +18,7 @@
             <label class="col-sm-2 control-label" ><h4>请选择公众号</h4></label>
             <div class="col-sm-5">
                 <select class="openid form-control" >
-                    <option value="loading">载入中……</option>
+                    
                 </select>
             </div>
             <div class="col-sm-3">
@@ -58,6 +58,13 @@
 <script src="../bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 $('#header').find('li').eq(2).attr('class','active');
+<?php 
+$valueGET = isset($_GET['value']) ? $_GET['value'] : 'loading';
+$cnameGET = isset($_GET['cname']) ? $_GET['cname'] : '载入中';
+?>
+
+$('.openid').prepend('<option value="<?php echo $valueGET; ?>"><?php echo $cnameGET; ?></option>');
+
 </script>
 <script src="cssjs/wechat.js"></script>
 <?php include 'include/footer.php'; ?>

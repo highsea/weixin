@@ -2,6 +2,12 @@ body{font-family: 'Microsoft YaHei'}
 /*header*/
 
 /*content*/
+.none{display: none;}
+.block{display: block;}
+.cnameWX{position: relative;}
+.cnameWX > div{cursor: pointer;text-decoration: underline;}
+.cnameWX a{color: #c7254e}
+.dimensional{position: absolute;left: 80%;width: 145px;height: 145px;top: 0;background: #ccc;z-index: 9}
 .bs-callout {padding: 20px;margin: 20px 0;border: 1px solid #eee;border-left-width: 5px;border-radius: 3px;}
 .bs-callout-danger{border-left-color: #d9534f;}
 .redborder{border-color: #f60}
@@ -11,6 +17,6 @@ em{font-style: normal;font-size: 30%}
 .pad1em{padding: 1em}
 
 /*footer*/
-.footer_bottom{position: absolute;bottom: 0;background: #ccc;color: #fff;width: 100%;}
-.footer{margin: 0 auto;width: 80%}
+.footer_bottom{position: fixed;bottom: 0;background: #ccc;color: #fff;width: 100%;}
+.footer{margin: 0 auto;width: 80%;text-align: center;}
 .footer a{color: #fff}

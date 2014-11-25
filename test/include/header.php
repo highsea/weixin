@@ -18,7 +18,7 @@ function _getUrlContent($url){
         $content = stream_get_contents($handle,1024*1024);
         return $content;
     }else{
-        return false;
+        return 'error';
     }   
 }
 ?>
