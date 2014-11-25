@@ -1,0 +1,16 @@
+body{font-family: 'Microsoft YaHei'}
+/*header*/
+
+/*content*/
+.bs-callout {padding: 20px;margin: 20px 0;border: 1px solid #eee;border-left-width: 5px;border-radius: 3px;}
+.bs-callout-danger{border-left-color: #d9534f;}
+.redborder{border-color: #f60}
+em{font-style: normal;font-size: 30%}
+.bs-callout {padding: 20px;margin: 20px 0;border: 1px solid #eee;border-left-width: 5px;border-radius: 3px;}
+.bs-callout-danger{border-left-color: #d9534f;}
+.pad1em{padding: 1em}
+
+/*footer*/
+.footer_bottom{position: absolute;bottom: 0;background: #ccc;color: #fff;width: 100%;}
+.footer{margin: 0 auto;width: 80%}
+.footer a{color: #fff}
