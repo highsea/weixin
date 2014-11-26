@@ -15,7 +15,18 @@ em{font-style: normal;font-size: 30%}
 .bs-callout {padding: 20px;margin: 20px 0;border: 1px solid #eee;border-left-width: 5px;border-radius: 3px;}
 .bs-callout-danger{border-left-color: #d9534f;}
 .pad1em{padding: 1em}
+.topwords li,.hotwords li{float: left;width: 50%;list-style: none;padding: 0 2%}
+.topwords,.hotwords{height:100px;overflow: hidden;padding-left: 0;}
+.topwords a,.hotwords a{text-decoration: underline;}
 
+.random label,.topwords li, .hotwords li{white-space: nowrap;text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow: hidden; cursor: pointer;color: #428bca}
+.random label:hover{text-decoration: underline;}
+
+.placeholder{position: absolute;top: 0;color: #ccc;line-height: 34px;padding-left: 1em;}
+.placeholderHigh{color: #555}
+.redborder{border-color:#f00 }
+/**/
+.alltitle em{color: #f00}
 /*footer*/
 .footer_bottom{position: fixed;bottom: 0;background: #ccc;color: #fff;width: 100%;}
 .footer{margin: 0 auto;width: 80%;text-align: center;}
