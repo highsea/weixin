@@ -53,7 +53,7 @@ $('#header').find('li').eq(3).attr('class','active');
 var randomLabel = $('.random').find('label'),
     searchKey = $('#searchKey'),
     searchGo = $('.searchGo'),
-    pageNum = $('#pageNum').val(),
+    pageNum = $('#pageNum'),
     placeholder = $('.placeholder'),
     key_GET = decodeURIComponent("<?php echo isset($_GET['key']) ? $_GET['key'] : '请输入………'; ?>");
 if (key_GET==='请输入………'){
@@ -62,7 +62,7 @@ if (key_GET==='请输入………'){
     placeholder.text(key_GET);
     placeholder.addClass('placeholderHigh');
     //执行搜索
-    urlhtmlResult(key_GET,pageNum);
+    urlhtmlResult(key_GET,pageNum.val());
 
 };
 
@@ -86,7 +86,7 @@ randomLabel.on('click',function(){
     placeholder.removeClass('none').text(thisText).addClass('placeholderHigh');//显示label，值，高亮
     //searchKey.val(thisText);//设置value
     //执行搜索
-    urlhtmlResult(thisText,pageNum);
+    urlhtmlResult(thisText,pageNum.val());
 });
 //搜索判断
 searchGo.on('click', function(){
@@ -96,7 +96,7 @@ searchGo.on('click', function(){
         nowKey = searchKey.val()=='' ? placeholder.text() : searchKey.val();
         //console.log(nowKey);
     //执行搜索
-        urlhtmlResult(nowKey,pageNum);
+        urlhtmlResult(nowKey,pageNum.val());
     };
 });
 
